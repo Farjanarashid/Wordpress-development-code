@@ -1,0 +1,44 @@
+<?php
+/*
+You can place this all into your theme template file. Normally, I would take it a step further and run the processing logic (PHP)
+from a function within my functions.php hooked onto an action however it will work from within a theme file too.
+*/
+if ( 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action'] ) && $_POST['action'] == "my_post_type") {
+
+//store our post vars into variables for later use
+//now would be a good time to run some basic error checking/validation
+//to ensure that data for these values have been set
+$title     = $_POST['title'];
+$content   = $_POST['content'];
+$post_type = 'my_custom_post';
+$custom_field_1 = $_POST['custom_1'];
+$custom_field_2 = $_POST['custom_2'];    
+
+//the array of arguements to be inserted with wp_insert_post
+$new_post = array(
+'post_title'    => $title,
+'post_content'  => $content,
+'post_status'   => 'publish',          
+'post_type'     => $post_type 
+);
+
+//insert the the post into database by passing $new_post to wp_insert_post
+//store our post ID in a variable $pid
+$pid = wp_insert_post($new_post);
+
+//we now use $pid (post id) to help add out post meta data
+add_post_meta($pid, 'meta_key', $custom_field_1, true);
+add_post_meta($pid, 'meta_key', $custom_field_2, true);
+
+}
+
+?>
+<!---HTML form would look something similar to-->
+<form method="post" name="front_end" action="" >
+<input type="text" name="title" value="My Post Title" />
+<input type="text" name="content" value="My Post Content" />
+<input type="text" name="custom_1" value="Custom Field 1 Content" />
+<input type="text" name="custom_2" value="Custom Field 2 Content" />
+<button type="submit">Submit</button>
+<input type="hidden" name="action" value="my_post_type" />
+</form>
