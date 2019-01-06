@@ -19,13 +19,13 @@ function far_property_imp_fields($post){
 		<option value="'.$owner_id.'" '.$selected.'>'.$username.' - '.$owner_name.'</option>
 		</select>
 
-	<input type="text" name="name" id="name" value="<?php echo get_post_meta($post->ID, 'name', true);?>">
+	        <input type="text" name="name" id="name" value="<?php echo get_post_meta($post->ID, 'name', true);?>">
 	<?php
 }
 //for save data to database
 add_action('save_post', 'far_save_database_property');
 function far_save_database_property($post_id){		
-	update_post_meta($post_id, 'owner_id', $_POST['owner_id']);
+  update_post_meta($post_id, 'owner_id', $_POST['owner_id']);
   update_post_meta($post_id, 'owner_id', $_POST['name']);
 }
 ?>
