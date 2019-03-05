@@ -1,0 +1,60 @@
+<?php
+//creating options page
+function myplugin_register_options_page() {
+  add_options_page('Text Typing Effect', 'Text Typing Settings', 'manage_options', 'fr-typng', 'far_typing_options_page');
+}
+add_action('admin_menu', 'myplugin_register_options_page');
+
+function far_typing_options_page(){
+?>
+  <form method="post" action="options.php">
+ <?php 
+ 	settings_fields( 'fr-typng' );	                                    
+	do_settings_sections( 'fr-typng' );
+    submit_button(); ?>
+  </form>
+<?php
+} 
+
+//Setting API
+ function fr_settings_api_init() {
+
+ 	add_settings_section(
+		'fr_typing_setting_section',
+		'Typing Effect Settings',
+		'fr_typing_section_callback_function',
+		'fr-typng' // page id
+	);
+
+ 	add_settings_field(
+		'fr_typng_speed',
+		'Typing Speed',
+		'fr_typing_callback_function',
+		'fr-typng', // page id
+		'fr_typing_setting_section' // section id
+	);
+ 	
+ 	register_setting( 'fr-typng', 'fr_typng_speed' ); //page id,  field id
+ }
+ 
+ add_action( 'admin_init', 'fr_settings_api_init' );
+ 
+  
+ // ------------------------------------------------------------------
+ // Settings section callback function
+ // ------------------------------------------------------------------
+ 
+ function fr_typing_section_callback_function() {
+ 	echo '<p>Copy this shortcode and paste where want to show it . <b>[text-typing]</b></p>';
+ }
+ 
+ // ------------------------------------------------------------------
+ // Callback function for our example setting
+ // ------------------------------------------------------------------
+ 
+ function fr_typing_callback_function() {
+ 	echo '<input name="fr_typng_speed" id="fr_typng_speed" type="text" value="'.get_option('fr_typng_speed').'" class="code"/>';
+ }
+
+
+?>
