@@ -1,0 +1,47 @@
+<?php
+function custom_post_loop() {
+
+global $paged;
+
+if ( get_query_var( 'paged' ) ) { $paged = get_query_var( 'paged' ); }
+elseif ( get_query_var( 'page' ) ) { $paged = get_query_var( 'page' ); }
+else { $paged = 1; }
+$args = array(
+	'post_type' => 'post',
+   'posts_per_page'=> 3,
+  'paged' => $paged
+);
+
+    $my_query = new WP_query($args);
+
+
+
+    if($my_query->have_posts()):
+        while($my_query->have_posts()) : $my_query->the_post();
+            ?>
+
+
+
+ <h3><a href="<?php the_permalink(); ?>" ><?php the_title(); ?></a></h3>
+        <div><a href="<?php the_permalink(); ?>"><?php the_post_thumbnail(); ?></a></div>
+
+            <?php
+        endwhile;
+
+         ?>
+	
+
+	<div class="navigation">
+         <div class="nav_prev"><?php previous_posts_link( '&laquo; PREV', $my_query->max_num_pages) ?></div> 
+         <div class="nav_next"><?php next_posts_link( 'NEXT &raquo;', $my_query->max_num_pages) ?></div>
+     </div> 
+
+         <?php
+
+    else :
+    _e( 'Sorry, no posts matched your criteria.' );
+    endif;
+
+}
+
+add_shortcode( 'home_post_loop', 'custom_post_loop' );
